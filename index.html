@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <style>
+        .container {
+            width: 100%;
+            margin-top: 100px;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            justify-items: center;
+        }
+
+        .item {
+            display: flex;
+            margin: 20px;
+            padding: 10px;
+            background-color: gray;
+            cursor: pointer;
+        }
+
+        .like {
+            background-color: yellow !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container row" id="tat_ca_danh_sach">
+
+    </div>
+
+    <script>
+
+        function lay_danh_sach_tu_local_store() {
+            let danh_sach = localStorage.getItem("danh_sach")
+            if (danh_sach === null) {
+                let tat_ca_danh_sach_mac_dinh = [{ id: "ekyc", "like": false }, { id: "esign", "like": false }, { id: "portal", "like": false }, { id: "repayment", "like": false }]
+                console.info("Không tìm thấy  danh sách trong local storage => tiến hành lưu danh sách mặc định ", tat_ca_danh_sach_mac_dinh)
+                localStorage.setItem("danh_sach", JSON.stringify(tat_ca_danh_sach_mac_dinh))
+                return tat_ca_danh_sach_mac_dinh
+            }
+
+
+            // console.info("Tìm thấy  danh sách trong local storage ", danh_sach)
+
+
+            return JSON.parse(danh_sach)
+        }
+
+        function cap_nhat_like_xuong_local_store(obj) { 
+            let danh_sach = lay_danh_sach_tu_local_store()
+            for (let index = 0; index < danh_sach.length; index++) {
+                let item = danh_sach[index];
+                if(item['id'] == obj['id']) {
+                    item['like'] = !obj['like']
+                    localStorage.setItem("danh_sach", JSON.stringify(danh_sach))
+                    render_danh_sach()
+                    return
+                }
+
+            
+            }
+        }
+
+        
+
+    </script>
+
+    
+
+
+    <script>
+        function render_item(obj) {
+
+            var item = document.createElement('div');
+            item.innerHTML = obj['id'];
+            if (obj['like']) {
+                item.className = "item like"
+            } else {
+                item.className = "item"
+            }
+
+
+            item.onclick = (event) => {
+                console.log(event)
+                cap_nhat_like_xuong_local_store(obj)
+            }
+            return item
+
+        }
+
+        function render_danh_sach() {
+            let danh_sach = lay_danh_sach_tu_local_store()
+            
+            let document_danh_sach = document.getElementById('tat_ca_danh_sach')
+            document_danh_sach.innerHTML = '';
+
+            for (let index = 0; index < danh_sach.length; index++) {
+                const item = render_item(danh_sach[index]);
+                document_danh_sach.appendChild(item)
+
+            }
+        }
+        render_danh_sach()
+    </script>
+
+    <script>
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
